@@ -1,5 +1,5 @@
-const vessel=require("../models/vessel");
-const voyage=require("../models/voyage");
+const Vessel = require("../models/vessel");
+const Voyage = require("../models/voyage");
 
 const createvoyage = async(req,res)=>{
     try{
@@ -10,7 +10,7 @@ const createvoyage = async(req,res)=>{
                 message:"vessel_id, voyage_number and destination are required"
             });
         }
-        const vessel=await vessel.findOne({
+        const vessel=await Vessel.findOne({
             id:vessel_id
         });
         if(!vessel){
@@ -28,8 +28,8 @@ const createvoyage = async(req,res)=>{
                 message:`A voyage with number ${voyage_number} already exists`
             });
         }
-        const count=await voyage.countDocuments();
-        const voyage1=await voyage.create({
+        const count=await Voyage.countDocuments();
+        const voyage1=await Voyage.create({
             id:`vy${count+1}`,
             vessel_id,
             voyage_number,

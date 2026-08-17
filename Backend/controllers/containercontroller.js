@@ -1,5 +1,5 @@
-// const voyage = require("../models/voyage");
-const voyage=require("../models/voyage");
+const Voyage = require("../models/voyage");
+const Vessel = require("../models/vessel");
 
 const addcontainer = async(req,res)=>{
     try{
@@ -25,16 +25,16 @@ const addcontainer = async(req,res)=>{
                 message:"late_charge must be greater than 0"
             });
         }
-        const voyage=await voyage.findOne({
+        const voyageDoc=await Voyage.findOne({
             id:voyage_id
         })
-        if(!voyage){
+        if(!voyageDoc){
             return res.status(404).json({
                 error:"VOYAGE_NOT_FOUND",
                 message:`No voyage found with id ${voyage_id}`
             });
         }
-        const existingcontainer = await voyage.findOne({
+        const existingcontainer = await Voyage.findOne({
             "containers.container_number":container_number
         });
         if(existingcontainer){
@@ -43,7 +43,8 @@ const addcontainer = async(req,res)=>{
                 message:`A container with number ${container_number} already exists`
             });
         }
-        if(voyage.containers.length>=vessel.capacity){
+        const vessel = await Vessel.findOne({ id: voyageDoc.vessel_id });
+        if(voyageDoc.containers.length>=vessel.capacity){
             return res.status(409).json({
                 error:"CAPACITY_EXCEEDED",
                 message:`MV Example can carry only ${vessel.capacity} containers on one voyage`
@@ -52,12 +53,12 @@ const addcontainer = async(req,res)=>{
         const container={
             container_number,
             destination,
-            // due_date=new Date(due_date),
-            late_charge: nUmber(late_charge),
+            due_date: new Date(due_date),
+            late_charge: Number(late_charge),
             arrived_on:null,
         };
-        voyage.containers.push(container);
-        await voyage.save();
+        voyageDoc.containers.push(container);
+        await voyageDoc.save();
         return res.status(201).json(container);
     }
     catch(error){

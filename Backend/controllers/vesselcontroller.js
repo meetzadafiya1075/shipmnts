@@ -1,4 +1,4 @@
-const vessel=require("../models/vessel");
+const Vessel = require("../models/vessel");
 
 const createvessel = async(req,res)=>{
     try{
@@ -15,7 +15,7 @@ const createvessel = async(req,res)=>{
                 message:"capacity must be a whole number greater than 0"
             });
         }
-        const existingvessel=await vessel.findOne({
+        const existingvessel=await Vessel.findOne({
             vessel_number:vessel_number
         });
         if(existingvessel){
@@ -24,15 +24,17 @@ const createvessel = async(req,res)=>{
                 message:`A vessel with number ${vessel_number} already exists`
             });
         }
-        const vessel=await vessel.create({
+        const count = await Vessel.countDocuments();
+        const newVessel=await Vessel.create({
             id:`v${count+1}`,
             name,
             vessel_number,
             capacity
         });
-        return res.status(201).json(vessel);
+        return res.status(201).json(newVessel);
     }
     catch(error){
+        console.error(error);
         return res.status(500).json({
             error:"Internal error",
             message:error.message
