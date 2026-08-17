@@ -12,6 +12,7 @@ const createvoyage = async(req,res)=>{
         }
         const vessel=await Vessel.findOne({
             id:vessel_id
+            
         });
         if(!vessel){
             return res.status(404).json({

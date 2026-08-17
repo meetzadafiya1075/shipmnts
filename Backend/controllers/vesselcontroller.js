@@ -32,6 +32,7 @@ const createvessel = async(req,res)=>{
             capacity
         });
         return res.status(201).json(newVessel);
+        
     }
     catch(error){
         console.error(error);

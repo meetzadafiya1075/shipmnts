@@ -10,6 +10,7 @@ const addcontainer = async(req,res)=>{
             due_date,
             late_charge
         }=req.body;
+        
         if(!container_number||
             !destination||
             !due_date||
