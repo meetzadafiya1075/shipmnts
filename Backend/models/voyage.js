@@ -1,0 +1,65 @@
+const mongoose = require("mongoose");
+const containerSchema  = new mongoose.Schema(
+    {
+        container_number:{
+            type:String,
+            required:true
+        },
+        destination:{
+            type:String,
+            required:true
+        },
+        due_date:{
+            type:Date,
+            required:true
+        },
+        late_charge:{
+            type:Number,
+            required:true
+        },
+        arrived_on:{
+            type:Date,
+            default:null
+        }
+    },
+    {
+        _id:false
+    }
+)
+
+const voyageSchema = new mongoose.Schema(
+    {
+        id:{
+            type:String,
+            unique:true,
+            required:true
+        },
+        vessel_id:{
+            type:String,
+            unique:true,
+            required:true
+        },
+        voyage_number:{
+            type:String,
+            required:true,
+            unique:true
+        },
+        destination:{
+            type:String,
+            required:true
+        },
+        status:{
+            type:String,
+            enum:["planned","sailing","completed"],
+            default:"planned"
+        },
+        route:{
+            type:[String],
+            default:[]
+        }
+    },
+    {
+        timestamps:true
+    }
+);
+module.exports=mongoose.model("voyage",voyageSchema);
